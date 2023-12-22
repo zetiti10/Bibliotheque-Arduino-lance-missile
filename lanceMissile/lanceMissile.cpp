@@ -12,7 +12,7 @@
 // Autres fichiers du programme.
 #include "lanceMissile.hpp"
 
-LanceMissile::LanceMissile(UARTClass *UART) : m_UART(UART) {}
+LanceMissile::LanceMissile(UARTClass &UART) : m_UART(UART) {}
 
 LanceMissile::begin()
 {
