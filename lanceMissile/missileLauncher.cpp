@@ -27,7 +27,7 @@ void MissileLauncher::begin()
 
 /// @brief Effectue un déplacement dans un sens pour une durée spécifiée.
 /// @param move Le déplacement.
-/// @param time Durée du déplacement en millisecondes (jusqu'à 99 999ms).
+/// @param time Durée du déplacement en millisecondes (jusqu'à `99999ms`).
 void MissileLauncher::timerMove(int move, int time)
 {
     String messageToSend = "0";
@@ -38,7 +38,7 @@ void MissileLauncher::timerMove(int move, int time)
 
 /// @brief Effectue le déplacement d'un axe en fonction d'un angle relatif.
 /// @param axis L'axe.
-/// @param angle L'angle relatif en degré (de -180 à 180 pour l'axe horizontal et de -40 à +40 pour l'axe vertical).
+/// @param angle L'angle relatif en degré (de `-180` à `180` pour l'axe horizontal et de `-40` à `+40` pour l'axe vertical).
 void MissileLauncher::relativeMove(int axis, int angle)
 {
     String messageToSend = "1";
@@ -51,7 +51,7 @@ void MissileLauncher::relativeMove(int axis, int angle)
 
 /// @brief Effectue le déplacement d'un axe à un angle spécifique par rapport au point 0.
 /// @param axis L'axe.
-/// @param angle L'angle absolu en degré (de 0 à 180 pour l'axe horizontal et de 0 à 40 pour l'axe vertical).
+/// @param angle L'angle absolu en degré (de `0` à `180` pour l'axe horizontal et de `0` à `40` pour l'axe vertical).
 void MissileLauncher::absoluteMove(int axis, int angle)
 {
     String messageToSend = "2";
@@ -109,7 +109,7 @@ int* MissileLauncher::getPosition()
 }
 
 /// @brief Métrode permettant de savoir si un missile est chargé à chaque emplacement.
-/// @return Un pointeur vers un tableau d'entiers de 3 valeurs (1 = missile chargé et 0 = vide).
+/// @return Un pointeur vers un tableau d'entiers de 3 valeurs (`1` = missile chargé et `0` = vide).
 int* MissileLauncher::getMissileStates()
 {
     m_UART->println("51");

@@ -14,6 +14,7 @@
 
 #define CONNECTION_TIMEOUT 1000
 
+/// @brief Objet permettant de contrôler un lance-missile connecté en UART. 
 class MissileLauncher
 {
 public:
