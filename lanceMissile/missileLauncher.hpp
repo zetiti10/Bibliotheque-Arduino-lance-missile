@@ -1,5 +1,5 @@
-#ifndef LANCE_MISSILE_DEFINITIONS
-#define LANCE_MISSILE_DEFINITIONS
+#ifndef MISSILE_LAUNCHER_DEFINITIONS
+#define MISSILE_LAUNCHER_DEFINITIONS
 
 #include <Arduino.h>
 
@@ -7,14 +7,17 @@
 #define DOWN 1
 #define LEFT 2
 #define RIGHT 3
+#define STILL 4
 
 #define BASE 0
 #define ANGLE 1
 
-class LanceMissile
+#define CONNECTION_TIMEOUT 1000
+
+class MissileLauncher
 {
 public:
-    LanceMissile(HardwareSerial *UART);
+    MissileLauncher(HardwareSerial *UART);
     void begin();
     void timerMove(int move, int time);
     void relativeMove(int axis, int angle);
@@ -23,10 +26,17 @@ public:
     void stopMove(int axis);
     void calibrate();
     void launchMissile(int number);
-    int getPosition(); // Tableau de 2.
-    int getMissileStates(); // Tableau de 3.
+    int* getPosition();
+    int* getMissileStates();
+    boolean isConnected();
+    boolean isReady();
+    int baseCurrentMovement();
+    int angleCurrentMovement();
+    int missilesToLaunch();
 
 private:
+    String waitForAMessage();
+
     HardwareSerial *m_UART;
 };
 
