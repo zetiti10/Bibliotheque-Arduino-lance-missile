@@ -12,14 +12,14 @@
 #define BASE 0
 #define ANGLE 1
 
-#define CONNECTION_TIMEOUT 1000
-
 /// @brief Objet permettant de contrôler un lance-missile connecté en UART. 
 class MissileLauncher
 {
 public:
     MissileLauncher(HardwareSerial *UART);
-    void begin();
+    MissileLauncher(HardwareSerial *UART, int baudRate, int timeout);
+
+    boolean begin();
     void timerMove(int move, int time);
     void relativeMove(int axis, int angle);
     void absoluteMove(int axis, int angle);
@@ -37,6 +37,10 @@ public:
 
 private:
     String waitForAMessage();
+
+    int m_baudRate;
+    int m_timeout;
+    int m_UARTWaitingTime;
 
     HardwareSerial *m_UART;
 };
