@@ -12,7 +12,7 @@
 #define BASE 0
 #define ANGLE 1
 
-/// @brief Objet permettant de contrôler un lance-missile connecté en UART. 
+/// @brief Objet permettant de contrôler un lance-missile connecté en UART.
 class MissileLauncher
 {
 public:
@@ -27,8 +27,8 @@ public:
     void stopMove(int axis);
     void calibrate();
     void launchMissile(int number);
-    int* getPosition();
-    int* getMissileStates();
+    int *getPosition();
+    int *getMissileStates();
     boolean isConnected();
     boolean isReady();
     int baseCurrentMovement();
@@ -37,6 +37,7 @@ public:
 
 private:
     String waitForAMessage();
+    String addZeros(int number, int totalNumbers);
 
     int m_baudRate;
     int m_timeout;

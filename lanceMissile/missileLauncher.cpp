@@ -8,9 +8,6 @@
 
 // Ajout des bibliothèques au programme.
 #include <Arduino.h>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
 
 // Autres fichiers du programme.
 #include "missileLauncher.hpp"
@@ -49,7 +46,7 @@ void MissileLauncher::timerMove(int move, int time)
 {
     String messageToSend = "0";
     messageToSend += move;
-    messageToSend << std::setfill('0') << std::setw(5) << time;
+    messageToSend += addZeros(time, 5);
     m_UART->print(messageToSend);
 }
 
@@ -61,8 +58,8 @@ void MissileLauncher::relativeMove(int axis, int angle)
     String messageToSend = "1";
     messageToSend += axis;
     if (angle >= 0)
-        messageToSend += "+" else messageToSend += "-";
-    messageToSend << std::setfill('0') << std::setw(3) << abs(angle);
+        messageToSend += "+"; else messageToSend += "-";
+    messageToSend += addZeros(abs(angle), 3);
     m_UART->print(messageToSend);
 }
 
@@ -73,7 +70,7 @@ void MissileLauncher::absoluteMove(int axis, int angle)
 {
     String messageToSend = "2";
     messageToSend += axis;
-    messageToSend << std::setfill('0') << std::setw(3) << angle;
+    messageToSend += addZeros(angle, 3);
     m_UART->print(messageToSend);
 }
 
@@ -120,7 +117,7 @@ void MissileLauncher::launchMissile(int number)
 
 /// @brief Méthode permettant de récupérer la position actuelle du lance-missile.
 /// @return Un pointeur vers un tableau d'entiers : la première valeur est celle de l'axe horiontal et la seconde est celle de l'axe vertical.
-int* MissileLauncher::getPosition()
+int *MissileLauncher::getPosition()
 {
     m_UART->print("50");
 
@@ -130,15 +127,15 @@ int* MissileLauncher::getPosition()
         return 0;
 
     int arrayToReturn[2];
-    arrayToReturn[0] = int(receivedMessage.substring(0, 3));
-    arrayToReturn[1] = int(receivedMessage.substring(8, 11));
+    arrayToReturn[0] = receivedMessage.substring(0, 3).toInt();
+    arrayToReturn[1] = receivedMessage.substring(8, 11).toInt();
 
     return arrayToReturn;
 }
 
 /// @brief Métrode permettant de savoir si un missile est chargé à chaque emplacement.
 /// @return Un pointeur vers un tableau d'entiers de 3 valeurs (`1` = missile chargé et `0` = vide).
-int* MissileLauncher::getMissileStates()
+int *MissileLauncher::getMissileStates()
 {
     m_UART->print("51");
 
@@ -148,9 +145,9 @@ int* MissileLauncher::getMissileStates()
         return 0;
 
     int arrayToReturn[3];
-    arrayToReturn[0] = int(receivedMessage.substring(0, 1));
-    arrayToReturn[1] = int(receivedMessage.substring(1, 2));
-    arrayToReturn[2] = int(receivedMessage.substring(2, 3));
+    arrayToReturn[0] = receivedMessage.substring(0, 1).toInt();
+    arrayToReturn[1] = receivedMessage.substring(1, 2).toInt();
+    arrayToReturn[2] = receivedMessage.substring(2, 3).toInt();
 
     return arrayToReturn;
 }
@@ -163,7 +160,7 @@ boolean MissileLauncher::isConnected()
 
     String receivedMessage = waitForAMessage();
 
-    return (!receivedMessage == "");
+    return !(receivedMessage == "");
 }
 
 /// @brief Méthode permetant de savoir si le lance missile connecté est initialisé / calibré.
@@ -177,7 +174,7 @@ boolean MissileLauncher::isReady()
     if (receivedMessage == "")
         return false;
 
-    return int(receivedMessage);
+    return receivedMessage.toInt();
 }
 
 /// @brief Méthode permettant de savoir si l'axe de la base est en mouvement.
@@ -191,7 +188,7 @@ int MissileLauncher::baseCurrentMovement()
     if (receivedMessage == "")
         return STILL;
 
-    return int(receivedMessage);
+    return receivedMessage.toInt();
 }
 
 /// @brief Méthode permettant de savoir si l'axe de l'inclinaison est en mouvement.
@@ -205,7 +202,7 @@ int MissileLauncher::angleCurrentMovement()
     if (receivedMessage == "")
         return STILL;
 
-    return int(receivedMessage);
+    return receivedMessage.toInt();
 }
 
 /// @brief Méthode permettant de connaître le nombre de missiles restants à lancer.
@@ -219,7 +216,7 @@ int MissileLauncher::missilesToLaunch()
     if (receivedMessage == "")
         return 0;
 
-    return int(receivedMessage);
+    return receivedMessage.toInt();
 }
 
 String MissileLauncher::waitForAMessage()
@@ -233,11 +230,29 @@ String MissileLauncher::waitForAMessage()
     delay(m_UARTWaitingTime);
 
     String receivedMessage;
-    while (UART->available() > 0)
+    while (m_UART->available() > 0)
     {
-        char letter = UART->read();
+        char letter = m_UART->read();
         receivedMessage += letter;
     }
 
     return receivedMessage;
+}
+
+String MissileLauncher::addZeros(int number, int totalNumbers)
+{
+    String stringNumber = String(number);
+
+    String formattedNumber = "";
+
+    int zerosToAdd = totalNumbers - stringNumber.length();
+
+    for (int i = 0; i < zerosToAdd; i++)
+    {
+        formattedNumber += "0";
+    }
+
+    formattedNumber += stringNumber;
+
+    return formattedNumber;
 }
