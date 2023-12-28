@@ -15,6 +15,16 @@
 /// @brief Objet permettant de contrôler un lance-missile connecté en UART.
 class MissileLauncher
 {
+private:
+    String waitForAMessage();
+    String addZeros(int number, int totalNumbers);
+
+    int m_baudRate;
+    int m_timeout;
+    int m_UARTWaitingTime;
+
+    HardwareSerial *m_UART;
+
 public:
     MissileLauncher(HardwareSerial *UART);
     MissileLauncher(HardwareSerial *UART, int baudRate, int timeout);
@@ -34,16 +44,6 @@ public:
     int baseCurrentMovement();
     int angleCurrentMovement();
     int missilesToLaunch();
-
-private:
-    String waitForAMessage();
-    String addZeros(int number, int totalNumbers);
-
-    int m_baudRate;
-    int m_timeout;
-    int m_UARTWaitingTime;
-
-    HardwareSerial *m_UART;
 };
 
 #endif
