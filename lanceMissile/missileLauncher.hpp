@@ -12,6 +12,8 @@
 #define BASE 0
 #define ANGLE 1
 
+#define END_LINE_CHAR 'e'
+
 /// @brief Objet permettant de contrôler un lance-missile connecté en UART.
 class MissileLauncher
 {
@@ -19,15 +21,15 @@ private:
     String waitForAMessage();
     String addZeros(int number, int totalNumbers);
 
-    int m_baudRate;
-    int m_timeout;
-    int m_UARTWaitingTime;
-
     HardwareSerial *m_UART;
+
+    unsigned long m_baudRate;
+    unsigned long m_timeout;
+    unsigned long m_UARTWaitingTime;
 
 public:
     MissileLauncher(HardwareSerial *UART);
-    MissileLauncher(HardwareSerial *UART, int baudRate, int timeout);
+    MissileLauncher(HardwareSerial *UART, unsigned long baudRate, unsigned long timeout);
 
     boolean begin();
     void timerMove(int move, int time);
@@ -37,8 +39,8 @@ public:
     void stopMove(int axis);
     void calibrate();
     void launchMissile(int number);
-    int *getPosition();
-    int *getMissileStates();
+    void getPosition(int &baseAngle, int &angleAngle);
+    void getMissileStates(int &firstMissile, int &secondMissile, int &thirdMissile);
     boolean isConnected();
     boolean isReady();
     int baseCurrentMovement();
