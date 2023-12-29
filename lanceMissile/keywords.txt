@@ -1,0 +1,25 @@
+MissileLauncher	KEYWORD1
+
+begin	KEYWORD2
+timerMove	KEYWORD2
+relativeMove	KEYWORD2
+absoluteMove	KEYWORD2
+beginMove	KEYWORD2
+stopMove	KEYWORD2
+calibrate	KEYWORD2
+launchMissile	KEYWORD2
+getPosition	KEYWORD2
+getMissileStates	KEYWORD2
+isConnected	KEYWORD2
+isReady	KEYWORD2
+baseCurrentMovement	KEYWORD2
+angleCurrentMovement	KEYWORD2
+missilesToLaunch	KEYWORD2
+
+UP	LITERAL1
+DOWN	LITERAL1
+LEFT	LITERAL1
+RIGHT	LITERAL1
+STILL	LITERAL1
+BASE	LITERAL1
+ANGLE	LITERAL1

@@ -130,7 +130,8 @@ void MissileLauncher::launchMissile(int number)
 }
 
 /// @brief Méthode permettant de récupérer la position actuelle du lance-missile.
-/// @return Un pointeur vers un tableau d'entiers : la première valeur est celle de l'axe horiontal et la seconde est celle de l'axe vertical.
+/// @param baseAngle La variable où rentrer l'angle actuel de la base.
+/// @param angleAngle La variable où rentrer l'angle actuel de l'inclinaison.
 void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 {
     m_UART->print("50" + END_LINE_CHAR);
@@ -145,7 +146,9 @@ void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 }
 
 /// @brief Métrode permettant de savoir si un missile est chargé à chaque emplacement.
-/// @return Un pointeur vers un tableau d'entiers de 3 valeurs (`1` = missile chargé et `0` = vide).
+/// @param firstMissile La variable où rentrer l'état du premier support de missile.
+/// @param secondMissile La variable où rentrer l'état du second support de missile.
+/// @param thirdMissile La variable où rentrer l'état du troisième support de missile.
 void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, int &thirdMissile)
 {
     m_UART->print("51" + END_LINE_CHAR);
