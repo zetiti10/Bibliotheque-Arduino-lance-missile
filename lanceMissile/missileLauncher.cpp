@@ -18,7 +18,7 @@ MissileLauncher::MissileLauncher(HardwareSerial *UART) : m_UART(UART)
 {
     m_baudRate = 115200;
     m_timeout = 1000;
-    m_UARTWaitingTime = (160 / m_baudRate) + 1;
+    m_UARTWaitingTime = (160 / m_baudRate) + 10;
 }
 
 /// @brief Crée un objet lance-missile.
@@ -27,7 +27,7 @@ MissileLauncher::MissileLauncher(HardwareSerial *UART) : m_UART(UART)
 /// @param timeout Temps d'attende d'une réponse de la part du lance-missile en millisecondes.
 MissileLauncher::MissileLauncher(HardwareSerial *UART, unsigned long baudRate, unsigned long timeout) : m_UART(UART), m_baudRate(baudRate), m_timeout(timeout)
 {
-    m_UARTWaitingTime = (160 / baudRate) + 1;
+    m_UARTWaitingTime = (160 / baudRate) + 10;
 }
 
 /// @brief Initialise la communication avec le lance-missile. Méthode bloquante : elle attend que lance-missile soit initialisé avant de renvoyer `true` s'il est connecté.
@@ -55,8 +55,7 @@ void MissileLauncher::timerMove(int move, int time)
     String messageToSend = "0";
     messageToSend += move;
     messageToSend += addZeros(time, 5);
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Effectue le déplacement d'un axe en fonction d'un angle relatif.
@@ -67,10 +66,11 @@ void MissileLauncher::relativeMove(int axis, int angle)
     String messageToSend = "1";
     messageToSend += axis;
     if (angle >= 0)
-        messageToSend += "+"; else messageToSend += "-";
+        messageToSend += "+";
+    else
+        messageToSend += "-";
     messageToSend += addZeros(abs(angle), 3);
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Effectue le déplacement d'un axe à un angle spécifique par rapport au point 0.
@@ -81,8 +81,7 @@ void MissileLauncher::absoluteMove(int axis, int angle)
     String messageToSend = "2";
     messageToSend += axis;
     messageToSend += addZeros(angle, 3);
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Débute le mouvement d'un axe dans la direction souhaitée.
@@ -91,8 +90,7 @@ void MissileLauncher::beginMove(int move)
 {
     String messageToSend = "30";
     messageToSend += move;
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Stoppe le mouvement d'un axe.
@@ -101,14 +99,13 @@ void MissileLauncher::stopMove(int axis)
 {
     String messageToSend = "31";
     messageToSend += axis;
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Effectue un calibrage complet du lance-missile. Méthode bloquante : retour à la fin de la calibration ou si le lance-missile est déconnecté.
 void MissileLauncher::calibrate()
 {
-    m_UART->print("32" + END_LINE_CHAR);
+    m_UART->println("32");
 
     while (!this->isReady())
     {
@@ -125,8 +122,7 @@ void MissileLauncher::launchMissile(int number)
 {
     String messageToSend = "4";
     messageToSend += number;
-    messageToSend += END_LINE_CHAR;
-    m_UART->print(messageToSend);
+    m_UART->println(messageToSend);
 }
 
 /// @brief Méthode permettant de récupérer la position actuelle du lance-missile.
@@ -134,7 +130,7 @@ void MissileLauncher::launchMissile(int number)
 /// @param angleAngle La variable où rentrer l'angle actuel de l'inclinaison.
 void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 {
-    m_UART->print("50" + END_LINE_CHAR);
+    m_UART->println("50");
 
     String receivedMessage = waitForAMessage();
 
@@ -151,7 +147,7 @@ void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 /// @param thirdMissile La variable où rentrer l'état du troisième support de missile.
 void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, int &thirdMissile)
 {
-    m_UART->print("51" + END_LINE_CHAR);
+    m_UART->println("51");
 
     String receivedMessage = waitForAMessage();
 
@@ -167,7 +163,7 @@ void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, in
 /// @return Retourne `true` si un lance missile est actuellement connecté.
 boolean MissileLauncher::isConnected()
 {
-    m_UART->print("52" + END_LINE_CHAR);
+    m_UART->println("52");
 
     String receivedMessage = waitForAMessage();
 
@@ -178,7 +174,7 @@ boolean MissileLauncher::isConnected()
 /// @return Retourne `true` si le lance missile est initialisé et calibré.
 boolean MissileLauncher::isReady()
 {
-    m_UART->print("52" + END_LINE_CHAR);
+    m_UART->println("52");
 
     String receivedMessage = waitForAMessage();
 
@@ -192,7 +188,7 @@ boolean MissileLauncher::isReady()
 /// @return Retourne le mouvement actuel.
 int MissileLauncher::baseCurrentMovement()
 {
-    m_UART->print("53" + END_LINE_CHAR);
+    m_UART->println("53");
 
     String receivedMessage = waitForAMessage();
 
@@ -206,7 +202,7 @@ int MissileLauncher::baseCurrentMovement()
 /// @return Retourne le mouvement actuel.
 int MissileLauncher::angleCurrentMovement()
 {
-    m_UART->print("53" + END_LINE_CHAR);
+    m_UART->println("53");
 
     String receivedMessage = waitForAMessage();
 
@@ -220,7 +216,7 @@ int MissileLauncher::angleCurrentMovement()
 /// @return Le nombre de missiles qui restent à lancer.
 int MissileLauncher::missilesToLaunch()
 {
-    m_UART->print("53" + END_LINE_CHAR);
+    m_UART->println("53");
 
     String receivedMessage = waitForAMessage();
 
@@ -245,13 +241,16 @@ String MissileLauncher::waitForAMessage()
     {
         char letter = m_UART->read();
 
-        if (letter == END_LINE_CHAR)
-            break;
+        if (letter == '\r')
+            continue;
+
+        if (letter == '\n')
+            return receivedMessage;
 
         receivedMessage += letter;
     }
 
-    return receivedMessage;
+    return "";
 }
 
 String MissileLauncher::addZeros(int number, int totalNumbers)

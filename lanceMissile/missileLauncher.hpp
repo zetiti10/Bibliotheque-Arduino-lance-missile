@@ -12,8 +12,6 @@
 #define BASE 0
 #define ANGLE 1
 
-#define END_LINE_CHAR 'e'
-
 /// @brief Objet permettant de contrôler un lance-missile connecté en UART.
 class MissileLauncher
 {
