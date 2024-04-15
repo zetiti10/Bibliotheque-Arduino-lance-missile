@@ -1,6 +1,7 @@
 MissileLauncher	KEYWORD1
 
 begin	KEYWORD2
+update	KEYWORD2
 timerMove	KEYWORD2
 relativeMove	KEYWORD2
 absoluteMove	KEYWORD2

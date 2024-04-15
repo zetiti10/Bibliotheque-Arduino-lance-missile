@@ -14,7 +14,7 @@ Il existe deux constructeurs pour instancier un objet lance-missile :
 
 ### Initiaisation de la communication
 
-Pour initialiser la communication avec le lance-missile (dans le `void setup()`), il faut utiliser la méthode `missileLauncher.begin();`. Cette méthode est bloquante : elle retourne `true` lorsque l'initialisation du lance-missile est terminée et `false` s'il y a une erreur de communication.
+Pour initialiser la communication avec le lance-missile (dans le `void setup()`), il faut utiliser la méthode `missileLauncher.begin(unsigned long autoUpdateDelay);`. Cette méthode est bloquante : elle retourne `true` lorsque l'initialisation du lance-missile est terminée et `false` s'il y a une erreur de communication. Le paramètre `autoUpdateDelay` permet de configurer l'intervalle de mise à jour de l'état du lance-missile (avec la méthode `update`).
 
 ### Informations importantes
 
@@ -54,6 +54,7 @@ L'angle de rotation de la base est de `180°` et celui de l'inclinaison est de `
 
 ### Récupération d'informations du lance-missile
 
+- `update(int &baseAngle, int &angleAngle, int &firstMissile, int &secondMissile, int &thirdMissile);` : méthode à exécuter périodiquement et qui modifie les variables en paramètre si une mise à jour est arrivée (configuration dans le `begin`). La variable est mise à `-1` si aucune mise à jour n'a été reçue.
 - `missileLauncher.getPosition(int &baseAngle, int &angleAngle);` : méthode permettant de récupérer la position actuelle du lance-missile. Les deux paramètres sont les variables ou seront enregistrées les valeurs d'angles actuelles.
 - `missileLauncher.getMissileStates(int &firstMissile, int &secondMissile, int &thirdMissile);` : métrode permettant de savoir si un missile est chargé à chaque emplacement. Les trois paramètres sont les variables ou seront enregistrés les états des supports de missile (chargé = `1` ou vide = `0`);
 - `missileLauncher.isConnected();` : méthode permettant de savoir si un lance-missile est connecté.

@@ -25,11 +25,14 @@ private:
     unsigned long m_timeout;
     unsigned long m_UARTWaitingTime;
 
+    String m_receivedMessage;
+
 public:
     MissileLauncher(HardwareSerial *UART);
     MissileLauncher(HardwareSerial *UART, unsigned long baudRate, unsigned long timeout);
 
-    boolean begin();
+    boolean begin(unsigned long autoUpdateDelay);
+    void update(int &baseAngle, int &angleAngle, int &firstMissile, int &secondMissile, int &thirdMissile);
     void timerMove(int move, int time);
     void relativeMove(int axis, int angle);
     void absoluteMove(int axis, int angle);

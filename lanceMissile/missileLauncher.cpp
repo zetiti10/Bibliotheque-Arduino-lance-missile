@@ -32,7 +32,7 @@ MissileLauncher::MissileLauncher(HardwareSerial *UART, unsigned long baudRate, u
 
 /// @brief Initialise la communication avec le lance-missile. Méthode bloquante : elle attend que lance-missile soit initialisé avant de renvoyer `true` s'il est connecté.
 /// @return Retourne `true` lorsque le lance-missile est connecté et initialisé (cela peut prendre un certain temps) et `false` s'il n'est pas connecté.
-boolean MissileLauncher::begin()
+boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
 {
     m_UART->begin(m_baudRate);
 
@@ -44,7 +44,67 @@ boolean MissileLauncher::begin()
         delay(10);
     }
 
+    if (autoUpdateDelay > 99999)
+        autoUpdateDelay = 99999;
+
+    String time = "60";
+    time += addZeros(autoUpdateDelay, 5);
+
+    m_UART->println(time);
+
     return true;
+}
+
+/// @brief Méthode permettant de récupérer une mise à jour de la position de la tête. A appeler périodiquement.
+/// @param baseAngle L'angle de la base en degré, renvoie `-1` si aucune mise à jour n'a été reçue.
+/// @param angleAngle L'angle de l'inclinaison en degré, renvoie `-1` si aucune mise à jour n'a été reçue.
+/// @param firstMissile L'état du premier missile, renvoie `-1` si aucune mise à jour n'a été reçue.
+/// @param secondMissile L'état du second missile, renvoie `-1` si aucune mise à jour n'a été reçue.
+/// @param thirdMissile L'état du troisième missile, renvoie `-1` si aucune mise à jour n'a été reçue.
+void MissileLauncher::update(int &baseAngle, int &angleAngle, int &firstMissile, int &secondMissile, int &thirdMissile)
+{
+    while (m_UART->available() > 0)
+    {
+        char letter = m_UART->read();
+
+        if (letter == '\r')
+            continue;
+
+        if (letter == '\n')
+        {
+            if (m_receivedMessage.length() == 15)
+            {
+                baseAngle = m_receivedMessage.substring(0, 3).toInt();
+                angleAngle = m_receivedMessage.substring(8, 11).toInt();
+            }
+
+            else
+            {
+                baseAngle = -1;
+                angleAngle = -1;
+            }
+
+            if (m_receivedMessage.length() == 3)
+            {
+                firstMissile = m_receivedMessage.substring(0, 1).toInt();
+                secondMissile = m_receivedMessage.substring(1, 2).toInt();
+                thirdMissile = m_receivedMessage.substring(2, 3).toInt();
+            }
+
+            else
+            {
+                firstMissile = -1;
+                secondMissile = -1;
+                thirdMissile = -1;
+            }
+
+            m_receivedMessage = "";
+
+            return;
+        }
+
+        m_receivedMessage += letter;
+    }
 }
 
 /// @brief Effectue un déplacement dans un sens pour une durée spécifiée.
