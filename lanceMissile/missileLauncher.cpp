@@ -47,8 +47,10 @@ boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
     if (autoUpdateDelay > 99999)
         autoUpdateDelay = 99999;
 
+    m_autoUpdateDelay = autoUpdateDelay
+
     String time = "60";
-    time += addZeros(autoUpdateDelay, 5);
+    time += addZeros(m_autoUpdateDelay, 5);
 
     m_UART->println(time);
 
@@ -72,6 +74,13 @@ void MissileLauncher::update(int &baseAngle, int &angleAngle, int &firstMissile,
 
         if (letter == '\n')
         {
+            if (m_receivedMessage == "61")
+            {
+                String time = "60";
+                time += addZeros(m_autoUpdateDelay, 5);
+                m_UART->println(time);
+            }
+
             if (m_receivedMessage.length() == 15)
             {
                 baseAngle = m_receivedMessage.substring(0, 3).toInt();
@@ -103,7 +112,8 @@ void MissileLauncher::update(int &baseAngle, int &angleAngle, int &firstMissile,
             return;
         }
 
-        m_receivedMessage += letter;
+        else
+            m_receivedMessage += letter;
     }
 }
 
@@ -194,7 +204,7 @@ void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 
     String receivedMessage = waitForAMessage();
 
-    if (receivedMessage == "")
+    if (receivedMessage == "" || receivedMessage.lenght() != 15)
         return;
 
     baseAngle = receivedMessage.substring(0, 3).toInt();
@@ -211,7 +221,7 @@ void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, in
 
     String receivedMessage = waitForAMessage();
 
-    if (receivedMessage == "")
+    if (receivedMessage == "" || receivedMessage.lenght() != 3)
         return;
 
     firstMissile = receivedMessage.substring(0, 1).toInt();

@@ -24,6 +24,7 @@ private:
     unsigned long m_baudRate;
     unsigned long m_timeout;
     unsigned long m_UARTWaitingTime;
+    unsigned long m_autoUpdateDelay;
 
     String m_receivedMessage;
 
