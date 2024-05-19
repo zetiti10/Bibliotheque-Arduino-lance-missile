@@ -204,7 +204,7 @@ void MissileLauncher::getPosition(int &baseAngle, int &angleAngle)
 
     String receivedMessage = waitForAMessage();
 
-    if (receivedMessage == "" || receivedMessage.length() != 15)
+    if (receivedMessage == "" || receivedMessage.length() != 15)
         return;
 
     baseAngle = receivedMessage.substring(0, 3).toInt();
@@ -221,7 +221,7 @@ void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, in
 
     String receivedMessage = waitForAMessage();
 
-    if (receivedMessage == "" || receivedMessage.length() != 3)
+    if (receivedMessage == "" || receivedMessage.length() != 3)
         return;
 
     firstMissile = receivedMessage.substring(0, 1).toInt();
