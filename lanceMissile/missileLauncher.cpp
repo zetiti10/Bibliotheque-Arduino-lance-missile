@@ -36,10 +36,18 @@ boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
 {
     m_UART->begin(m_baudRate);
 
+    unsigned int failCounter = 0;
     while (!this->isReady())
     {
         if (!this->isConnected())
-            return false;
+        {
+            failCounter++;
+            if (failCounter <= 3)
+                return false;
+        }
+
+        else
+            failCounter = 0;
 
         delay(10);
     }
