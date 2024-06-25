@@ -42,7 +42,7 @@ boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
         if (!this->isConnected())
         {
             failCounter++;
-            if (failCounter >= 5)
+            if (failCounter >= 2)
                 return false;
         }
 
@@ -306,8 +306,10 @@ String MissileLauncher::waitForAMessage()
     unsigned long initialTime = millis();
 
     while (!m_UART->available())
+    {
         if (millis() >= (initialTime + m_timeout))
             return "";
+    }
 
     delay(m_UARTWaitingTime);
 
