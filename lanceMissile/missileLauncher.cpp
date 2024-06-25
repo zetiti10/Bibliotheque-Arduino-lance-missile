@@ -42,7 +42,7 @@ boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
         if (!this->isConnected())
         {
             failCounter++;
-            if (failCounter <= 3)
+            if (failCounter >= 5)
                 return false;
         }
 

@@ -1,5 +1,5 @@
 // Ajout de la bilbiothèque.
-#include "missileLauncher.hpp"
+#include <missileLauncher.hpp>
 
 // Utilisation du port série 3 de l'Arduino Méga.
 MissileLauncher missileLauncher(&Serial3);
@@ -12,7 +12,7 @@ void setup()
     // Initialisation du lance missile.
     if (missileLauncher.begin())
     {
-        Serial.println("Lance-missile prêt !");
+        Serial.println(F("Lance-missile prêt !"));
 
         // Déplacement des deux axes.
         missileLauncher.relativeMove(BASE, 20);
@@ -24,9 +24,9 @@ void setup()
 
         missileLauncher.getPosition(baseAngle, angleAngle);
 
-        Serial.print("Angle de la base : ");
+        Serial.print(F("Angle de la base : "));
         Serial.println(baseAngle);
-        Serial.print("Angle de l'inclinaison : ");
+        Serial.print(F("Angle de l'inclinaison : "));
         Serial.println(angleAngle);
 
         // Lancement d'un missile.
@@ -34,7 +34,7 @@ void setup()
     }
 
     else
-        Serial.println("Erreur de connexion avec le lance-missile.");
+        Serial.println(F("Erreur de connexion avec le lance-missile."));
 }
 
 void loop()
