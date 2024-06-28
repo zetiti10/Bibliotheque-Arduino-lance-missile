@@ -42,7 +42,7 @@ boolean MissileLauncher::begin(unsigned long autoUpdateDelay)
         if (!this->isConnected())
         {
             failCounter++;
-            if (failCounter >= 2)
+            if (failCounter >= 5)
                 return false;
         }
 
@@ -241,7 +241,7 @@ void MissileLauncher::getMissileStates(int &firstMissile, int &secondMissile, in
 /// @return Retourne `true` si un lance missile est actuellement connecté.
 boolean MissileLauncher::isConnected()
 {
-    m_UART->println(F("52"));
+    m_UART->println(F("54"));
 
     String receivedMessage = waitForAMessage();
 
